@@ -2,7 +2,12 @@
 
 ## What it does
 
-It uses `libinput debug-events` to detect switches to normal and tablet mode,
+It uses `monitor-sensor` from [iio-sensor-proxy](https://github.com/hadess/iio-sensor-proxy) to detect switches for three modes:
+
+* normal
+* tablet lanscape
+* table portrait
+
 and executes commands for switching into that mode, which are specified in
 a config file. Generally you would put there commands to disable/enable a
 keyboard/touchpad/trackpoint, show/hide an on-screen keyboard, toggle some desktop
@@ -13,7 +18,7 @@ environment panels, and the like.
 All devices that have a tablet mode switch supported by libinput. As far as I understand
 this is a standard mechanism for this functionality nowadays. Tested devices:
 
-- ThinkPad X1 Yoga Gen2 (it was developed for it)
+- Teclast F6 Pro
 
 If it works on your device, please tell me and I'll add it to the list (or just submit a pull request yourself).
 
@@ -34,7 +39,7 @@ the leftmost column. That would correspond to /dev/input/event4. Device numbers 
 across reboots, so you may consider doing `ls -lh /dev/input/by-path` and finding a symlink to
 that device. For X1 Yoga Gen2 it's `/dev/input/by-path/platform-thinkpad_acpi-event`.
 
-`modes.laptop`, `modes.tablet` - this contain commands that will be executed when mode changes.
+`modes.laptop`, `modes.tablet-lanscape`, `modes.table-portrait` - these contain commands that will be executed when mode changes.
 Most likely this will contain `xinput enable` and `xinput disable` commands to enable/disable
 kb/touchpad/trackpoint (just run `xinput` to look them up). You may use any other commands
 to adjust your desktop environment (e.g. hide or show additional panels, increase button size,

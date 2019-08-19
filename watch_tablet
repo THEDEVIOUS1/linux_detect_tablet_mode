@@ -23,13 +23,15 @@ def activate_mode(mode)
 end
 
 def run_watcher
-  cmd = "stdbuf -oL -eL libinput debug-events --device #{config['input_device']}"
+  cmd = "monitor-sensor"
   io = IO.popen(cmd,"r")
   while s=io.gets
-    if m=s.match(/switch tablet-mode state (\d+)/)
-      case d=m[1].to_i
-      when 0 then activate_mode "laptop"
-      when 1 then activate_mode "tablet"
+    if m=s.match(/Accelerometer orientation changed: (.+)/)
+      case d=m[1]
+      when "normal" then activate_mode "laptop"
+      when "right-up" then activate_mode "tablet-portrait"
+      when "left-up" then activate_mode "tablet-portrait"
+      when "bottom-up" then activate_mode "tablet-landscape"
       end
     end
   end
